@@ -1,0 +1,155 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - thankyou
+  - bot_challenge
+  - out_of_scope
+  - inform
+  - ask_exercise
+  - begin_form
+
+entities:
+  - exercise
+  - sleep
+  - stress
+
+slots:
+  user_name:
+    type: text
+    influence_conversation: false
+  user_age:
+    type: float
+    influence_conversation: false
+    min_value: 18.0
+    max_value: 100.0
+  user_email:
+    type: text
+    influence_conversation: false
+  user_run_hist:
+    type: categorical
+    influence_conversation: false
+    values:
+      - yes
+      - no
+  exercise:
+    type: text
+    influence_conversation: false
+  user_sleep:
+    type: float
+    influence_conversation: false
+    min_value: 0.0
+    max_value: 24.0
+  stress:
+    type: categorical
+    influence_conversation: false
+    values:
+      - low
+      - medium
+      - high
+  confirm_exercise:
+    type: bool
+    influence_conversation: false
+      
+
+responses:
+  utter_greet:
+  - text: "Hey! Welcome to Mita, Do you want to start of by letting us know a few details?"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_ask_user_name:
+  - text: "What is your name?"
+
+  utter_ask_user_age:
+  - text: "How old are you?"
+
+  utter_ask_user_email:
+  - text: "What is your email address?"
+  
+  utter_ask_user_run_hist:
+  - text: "Have you run before?"
+  
+  utter_ask_confirm_exercise:
+  - text: Did you exercise yesterday? Don't sweat it if you didn't run a marathon - walks count!
+  
+  utter_ask_exercise:
+  - text: What kind of exercise did you do 💪 ?
+  
+  utter_ask_user_sleep:
+  - text: "How much sleep did you get 💤  last night?"
+  
+  utter_ask_stress:
+  - text: "Is your stress level low, medium, or high 🧘 ?"
+
+  
+  
+  utter_slots_values:
+  - text: "Here's your daily wellness log:\n
+            - Name: {user_name}\n
+            - Age: {user_age}\n
+            - Email : {user_email}\n
+            - Existing running history: {user_run_hist}\n
+            - Exercise: {exercise}\n
+            - Sleep : {user_sleep}\n
+            - Stress: {stress}"
+  
+  utter_no_worries:
+  - text: "No problem :)"
+  
+  utter_ask_continue:
+  - text: "Sorry, I don't quite understand. Do you want to continue?"
+
+  utter_exercise_info:
+  - text: "Most healthy adults should aim to get about 150 min of moderate exercise per week. This includes activities like a brisk walk or yard work."
+
+  utter_mission_accomplished:
+  - text: "Bro we did congrats"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+forms:
+  mita_form:
+    user_name:
+      - type: from_text
+    user_age:
+      - type: from_text
+    user_email:
+      - type: from_text
+    user_run_hist:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    confirm_exercise:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false 
+
+    exercise:
+      - type: from_text
+    user_sleep:
+      - type: from_text
+    stress:
+      - type: from_text
+
+actions:
+- validate_mita_form
+- action_save_data
+
+
+
